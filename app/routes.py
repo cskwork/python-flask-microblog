@@ -5,7 +5,17 @@ from app import app
 @app.route('/index')
 def index():
     user = {'username': 'Danny'}
-    return render_template('index.html', title='Home', user=user)
+    posts = [
+                {
+                    'author' : {'username':'홍길동'},
+                    'body' : '블로그 테스트'
+                },
+                {
+                    'author' : {'username':'홍길동2'},
+                    'body' : '블로그 테스트2'
+                }
+            ]
+    return render_template('index.html', title='Home', user=user, posts=posts)
     
 """
  @app.route decorator creates an association between the URL given as an argument and the function.
