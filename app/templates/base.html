@@ -1,14 +1,31 @@
 <html>
     <head>
       {% if title %}
-      <title>{{ title }} - Microblog</title>
+      <title>{{ title }} - 미니 블로그</title>
       {% else %}
-      <title>Welcome to Microblog</title>
+      <title>미니블로그에 오신걸 환영합니다</title>
       {% endif %}
     </head>
     <body>
-        <div>Microblog: <a href="/index">Home</a></div>
+        <div>미니블로그: 
+          <!-- <a href="/index">홈</a>
+          <a href="/login">로그인</a> -->
+          <a href="{{url_for('index')}}">홈</a> {{url_for('index')}}
+          <a href="{{url_for('login')}}">로그인</a> {{url_for('login')}}
+        </div>
         <hr>
+
+<!-- FLASH MESSAGE -->
+        {% with messages = get_flashed_messages()%}
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{message}}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </body>
 </html>
