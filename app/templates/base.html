@@ -10,8 +10,14 @@
         <div>미니블로그: 
           <!-- <a href="/index">홈</a>
           <a href="/login">로그인</a> -->
-          <a href="{{url_for('index')}}">홈</a> 
-          <a href="{{url_for('login')}}">로그인</a> 
+          <a href="{{url_for('index')}}">홈</a>
+
+          <!-- Add for user login -->
+          {% if current_user.is_anonymous %} 
+          <a href="{{url_for('login')}}">로그인</a>
+          {% else %} 
+          <a href="{{url_for('logout')}}">로그아웃</a> 
+          {% endif %}
         </div>
         <hr>
 

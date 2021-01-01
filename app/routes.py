@@ -1,9 +1,13 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import LoginForm
+#add for login
+from flask_login import current_user, login_user
+from app.models import User
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     user = {'username': 'Danny'}
     posts = [
@@ -20,14 +24,35 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #Add for user login
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     form = LoginForm()
     if form.validate_on_submit():
+        #Add for user login
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('사용자ID 또는 암호가 맞지 않습니다')
+            return redirect(url_for('login'))
+        #Register User as logged in
+        login_user(user, remember=form.remember.data)
+        #Req for login_required
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '';
+            next_page = url_for('index')
+        return redirect(next_page)
+        """
+        #Remove fake login
         flash('Login requested for user {}, remember_me{}'.format(
             form.username.data, form.remember_me.data))
-        return redirect('/index')
-
+        """
     return render_template('login.html', tittle='로그인', form=form)    
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 """
