@@ -1,9 +1,10 @@
-from flask import render_template, flash, redirect, url_for
-from app import app
+from flask import render_template, flash, redirect, url_for, request
+from app import app, db
 from app.forms import LoginForm, RegistrationForm
 #add for login
-from flask_login import current_user, login_user, login_required
+from flask_login import current_user, login_user, login_required, logout_user
 from app.models import User
+from werkzeug.urls import url_parse
 
 @app.route('/')
 @app.route('/index')
@@ -37,7 +38,7 @@ def login():
             flash('사용자ID 또는 암호가 맞지 않습니다')
             return redirect(url_for('login'))
         #Register User as logged in
-        login_user(user, remember=form.remember.data)
+        login_user(user, remember=form.remember_me.data)
         #Req for login_required
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -62,7 +63,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
-        user.setPassword(form.password.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('등록되었습니다!')
