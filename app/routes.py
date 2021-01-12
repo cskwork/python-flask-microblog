@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from app.models import User
 from werkzeug.urls import url_parse
 
-@app.route('/')
+@app.route('/') #init association with URL(as arugument) and function
 @app.route('/index')
 @login_required
 def index():
@@ -71,6 +71,15 @@ def register():
     return render_template('register.html', title='회원가입', form=form)
 
 
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)
 
 
 

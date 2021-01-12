@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
+#init packages
 app = Flask(__name__)
 app.config.from_object(Config)
 #
@@ -19,9 +20,11 @@ login = LoginManager(app)
 #Req User to login (give Flask-login view function for logins) 
 login.login_view = 'login'
 
+#init app to load template resources
 if __name__ == '__main__':
 	app.run(debug=True)
 
+#init URL(routes) for the app
 from app import routes, models
 
   
